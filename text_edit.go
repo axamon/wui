@@ -16,6 +16,7 @@ type TextEdit struct {
 	limit        int
 	autoHScroll  bool
 	writesTabs   bool
+	readOnly     bool
 	onTextChange func()
 }
 
@@ -105,4 +106,19 @@ func (e *TextEdit) handleNotification(cmd uintptr) {
 	if cmd == w32.EN_CHANGE && e.onTextChange != nil {
 		e.onTextChange()
 	}
+}
+
+func (e *TextEdit) SetReadOnly(readOnly bool) {
+	e.readOnly = readOnly
+	if e.handle != 0 {
+		if readOnly {
+			w32.SendMessage(e.handle, w32.EM_SETREADONLY, 1, 0)
+		} else {
+			w32.SendMessage(e.handle, w32.EM_SETREADONLY, 0, 0)
+		}
+	}
+}
+
+func (e *TextEdit) ReadOnly() bool {
+	return e.readOnly
 }
