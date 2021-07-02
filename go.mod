@@ -1,4 +1,4 @@
-module github.com/gonutz/wui
+module github.com/axamon/wui
 
 go 1.11
 
